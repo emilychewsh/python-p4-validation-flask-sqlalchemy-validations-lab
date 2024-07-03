@@ -48,12 +48,18 @@ class Post(db.Model):
     def validate_title(self, key, title):
         if not title:
             raise ValueError("Post must have a title")
+        
+        clickbaity_pattern = r'\b(Won\'t Believ|Secret|Top|Guess)'
+        
+        if not re.search(clickbaity_pattern, title):
+            raise ValueError("Not clickbaity")
         return title
 
     @validates('content')
     def validate_content(self, key, content):
         if len(content) < 250:
             raise ValueError("Post content must be at least 250 characters long")
+
         return content
 
     @validates('summary')
